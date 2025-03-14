@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FormsApp.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FormsApp.Controllers;
 
@@ -12,7 +13,7 @@ public class HomeController : Controller
 
     }
 
-    public IActionResult Index(string search)
+    public IActionResult Index(string search ,string category)
     {
         var products = Repository.Products;
 
@@ -23,7 +24,15 @@ public class HomeController : Controller
             // Case-insensitive search
             products = products.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
-        
+
+        // Category
+        if (!String.IsNullOrEmpty(category) && category !="0" )
+        {
+            products = products.Where(p => p.CategoryId == int.Parse(category)).ToList();
+        }
+
+
+        ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
         return View(products);
     }
 
