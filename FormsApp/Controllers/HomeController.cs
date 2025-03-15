@@ -32,8 +32,16 @@ public class HomeController : Controller
         }
 
 
-        ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
-        return View(products);
+        //ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
+        
+        
+        var model = new ProductViewModel
+        {
+            Products = products,
+            Categories = Repository.Categories,
+            SelectedCategory = category,
+        };
+        return View(model);
     }
 
     public IActionResult Privacy()
