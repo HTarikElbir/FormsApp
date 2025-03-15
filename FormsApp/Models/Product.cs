@@ -1,4 +1,6 @@
-﻿namespace FormsApp.Models
+﻿using System.ComponentModel;
+
+namespace FormsApp.Models
 {
     public class Product
     {
@@ -8,6 +10,8 @@
         public decimal Price { get; set; }
         public string? Image { get; set; }
         public bool IsAvailable { get; set; }
+
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
 
 

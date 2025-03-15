@@ -1,36 +1,32 @@
-﻿@{
+﻿@model Product
+@{
     ViewData["Title"] = "Create";
 }
 <h1>@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="post">
+<form asp-controller="Home" asp-action="Create" method="post">
     <div class="mb-3">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" class="form-control" />
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
     </div>
     <div class="mb-3">
-        <label for="Price">Price</label>
-        <input type="text" id="Price" name="Price" class="form-control" />
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
     </div>
     <div class="mb-3">
-        <label for="Image">Image</label>
-        <input type="text" id="Image" name="Image" class="form-control" />
+        <label asp-for="Image"></label>
+        <input asp-for="Image" class="form-control" />
     </div>
     <div class="mb-3">
-        <label for="CategoryId">Category</label>
-        <select id="CategoryId" name="CategoryId" class="form-select">
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
             <option value="">Select Category</option>
-            @foreach (var category in ViewBag.Categories)
-            {
-                <option value="@category.CategoryId">@category.Name</option>
-            })
-            
         </select>
     </div>
     
     <div class="mb-3 form-checkbox">
-        <input type="checkbox" id="IsAvailable" name="IsAvailable" class="form-check-input" />
-        <label for="IsAvailable" class="form-check-label">Is Available</label>
+        <input asp-for="IsAvailable" class="form-check-input" />
+        <label asp-for="IsAvailable"></label>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
