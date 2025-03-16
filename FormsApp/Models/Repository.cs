@@ -33,6 +33,13 @@
             {
                 return _categories;
             }
-        } 
+        }
+
+        // Create Product
+        public static void CreateProduct(Product product)
+        {
+            product.ProductId = _products.Max(p => p.ProductId) + 1;
+            _products.Add(product);
+        }
     }
 }

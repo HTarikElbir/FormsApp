@@ -53,6 +53,13 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Create(Product model)
     {
+        // Validation
+        if (ModelState.IsValid)
+        {
+            Repository.CreateProduct(model);
+            return RedirectToAction("Index");
+        }
+
         return View();
     }
 
