@@ -59,8 +59,8 @@ public class HomeController : Controller
             Repository.CreateProduct(model);
             return RedirectToAction("Index");
         }
-
-        return View();
+        ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
+        return View(model);
     }
 
 

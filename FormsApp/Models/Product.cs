@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace FormsApp.Models
 {
@@ -6,13 +7,22 @@ namespace FormsApp.Models
     {
         public int ProductId { get; set; }
 
-        public string Name { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public string Image { get; set; } = string.Empty;
+        [Required]
+        [DisplayName("Product Name")]
+        public string? Name { get; set; }
+
+        [Required]
+        [Range(0, 100000)]
+        public decimal? Price { get; set; }
+
+        [Required]
+        public string? Image { get; set; } 
+
         public bool IsAvailable { get; set; }
 
+        [Required]
         [DisplayName("Category")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
 
     }
