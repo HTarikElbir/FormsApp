@@ -89,5 +89,22 @@ public class HomeController : Controller
         return View(model);
     }
 
+    public IActionResult Edit(int id)
+    {
+        if (id == 0)
+        {
+            return NotFound();
+        }
+
+        var product = Repository.Products.FirstOrDefault(p => p.ProductId == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
+        return View(product);
+    }
 
 }
