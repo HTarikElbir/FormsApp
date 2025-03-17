@@ -41,5 +41,21 @@
             product.ProductId = _products.Max(p => p.ProductId) + 1;
             _products.Add(product);
         }
+
+        // Update Product
+        public static void UpdateProduct(Product product)
+        {
+            var selectedProduct = _products.FirstOrDefault(p => p.ProductId == product.ProductId);
+
+            if (selectedProduct != null) 
+            {
+                selectedProduct.Name = product.Name;
+                selectedProduct.Price = product.Price;
+                selectedProduct.Image = product.Image;
+                selectedProduct.CategoryId = product.CategoryId;
+                selectedProduct.IsAvailable = product.IsAvailable;
+            }
+            
+        }
     }
 }
