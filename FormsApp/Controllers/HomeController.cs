@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FormsApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace FormsApp.Controllers;
 
@@ -51,11 +52,36 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Product model)
+    public async Task<IActionResult> Create(Product model, IFormFile imageFile)
     {
+        var allowedExtansions = new[] {".jpg", ".jpeg", ".png", ".gif" };
+        // Take File Extansion
+        var extansion = Path.GetExtension(imageFile.FileName);
+        // Create Random Image Name
+        var randomImageName = string.Format($"{Guid.NewGuid()}{extansion}");
+        // Take Image Path
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", randomImageName);
+
+        // Check Extansion
+        if (imageFile != null)
+        {
+            if (!allowedExtansions.Contains(extansion.ToLower()))
+            {
+                // Add Model State Error
+                ModelState.AddModelError("", $"Please select a valid image file {string.Join(", " , allowedExtansions)}");
+            }
+        }
+
+
         // Validation
         if (ModelState.IsValid)
         {
+            // Save Image
+            using (var stream = new FileStream(imagePath, FileMode.Create))
+            {   
+                await imageFile.CopyToAsync(stream);
+            }
+            model.Image = randomImageName;
             Repository.CreateProduct(model);
             return RedirectToAction("Index");
         }

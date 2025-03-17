@@ -15,7 +15,6 @@ namespace FormsApp.Models
         [Range(0, 100000)]
         public decimal? Price { get; set; }
 
-        [Required]
         public string? Image { get; set; } 
 
         public bool IsAvailable { get; set; }
