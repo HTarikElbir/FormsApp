@@ -62,7 +62,7 @@
         public static void DeleteProduct(Product product)
         {
             var entity = _products.FirstOrDefault(p => p.ProductId == product.ProductId);
-
+          
 
             if (product != null)
             {
