@@ -54,18 +54,16 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Product model, IFormFile imageFile)
     {
-         var allowedExtansions = new[] {".jpg", ".jpeg", ".png", ".gif" };
-        // Take File Extansion
-        var extansion = Path.GetExtension(imageFile.FileName);
-        // Create Random Image Name
-        var randomImageName = string.Format($"{Guid.NewGuid()}{extansion}");
-        // Take Image Path
-        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", randomImageName);
+
+        var extension = ""; 
 
         // Check Extansion
         if (imageFile != null)
         {
-            if (!allowedExtansions.Contains(extansion.ToLower()))
+            var allowedExtansions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            // Take File Extansion
+            extension = Path.GetExtension(imageFile.FileName);
+            if (!allowedExtansions.Contains(extension.ToLower()))
             {
                 // Add Model State Error
                 ModelState.AddModelError("", $"Please select a valid image file {string.Join(", " , allowedExtansions)}");
@@ -75,15 +73,19 @@ public class HomeController : Controller
 
         // Validation
         if (ModelState.IsValid)
-        {
-            // Save Image
-            using (var stream = new FileStream(imagePath, FileMode.Create))
-            {   
-                await imageFile.CopyToAsync(stream);
-            }
-            model.Image = randomImageName;
-            Repository.CreateProduct(model);
-            return RedirectToAction("Index");
+        {  
+                // Create Random Image Name
+                var randomImageName = string.Format($"{Guid.NewGuid()}{extension}");
+                // Take Image Path
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", randomImageName);
+                // Save Image
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                model.Image = randomImageName;
+                Repository.CreateProduct(model);
+                return RedirectToAction("Index");
         }
         ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
         return View(model);
@@ -138,5 +140,21 @@ public class HomeController : Controller
         ViewBag.Categories = new SelectList(Repository.Categories, "CategoryId", "Name");
         return View(product);
 
+    }
+
+    public IActionResult Delete(int? id)
+    {
+        if (id == null) 
+        {
+            return NotFound();
+        }
+        var product = Repository.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        Repository.DeleteProduct(product);
+
+        return RedirectToAction("Index");
     }
 }
